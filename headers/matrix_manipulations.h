@@ -11,4 +11,6 @@ void add_point_with_temperature(std::vector<double>* matrix, std::string* str_da
 
 void add_all_temperatures_to_matrix(std::vector<double>* matrix, Json::Value* data, int height, int width);
 
+bool all_cells_of_same_temperature(std::vector<double>* matrix);
+
 #endif //MPI_MATRIX_MANIPULATIONS_H
