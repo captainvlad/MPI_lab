@@ -31,19 +31,6 @@ void add_all_temperatures_to_matrix(std::vector<double>* matrix, Json::Value* da
     }
 }
 
-bool all_cells_of_same_temperature(std::vector<double>* matrix){
-    bool same = 1;
-    double current_value = (*matrix)[0];
-
-    for (auto item: *matrix){
-        if (current_value != item){
-            return false;
-        }
-    }
-
-    return true;
-}
-
 int availible_upper_neighbour(std::vector<double>* matrix, int width, int number_of_all_parts, int part_of_interest){
 
     int height = matrix->size() / width;

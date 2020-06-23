@@ -4,6 +4,7 @@
 #include "headers/config_processing.h"
 #include "headers/matrix_manipulations.h"
 #include "headers/heat_calculation.h"
+#include "headers/visualisation.h"
 
 int main(int argc, char *argv[])
 {
@@ -31,7 +32,7 @@ int main(int argc, char *argv[])
         delta_t = config_data["delta_t"].asDouble();
 
         alpha = calculate_alpha(config_data["conduction"].asDouble(), config_data["capacity"].asDouble(),
-                config_data["density"].asDouble());
+                                config_data["density"].asDouble());
 
         int current_iteration = 0;
 
@@ -40,9 +41,6 @@ int main(int argc, char *argv[])
 
         auto matrix = *initialize_matrix(h, w);
         add_all_temperatures_to_matrix(&matrix, &config_data, h, w);
-
-//        represent_matrix(&matrix, h, w);
-//        std::cout << "\n\n";
 
         for (int i = 1; i < world_size; i++){
             MPI_Send(&delta_x, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
@@ -59,9 +57,7 @@ int main(int argc, char *argv[])
 
 //        assert(von_neumann_criterion(delta_x, delta_y, delta_t, alpha));
 
-        continue_signal = !all_cells_of_same_temperature(&matrix);
-
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < config_data["needed_iterations"].asInt(); i++) {
 
             continue_signal = true;
 
@@ -82,8 +78,9 @@ int main(int argc, char *argv[])
                 put_into(&matrix, &partial_matrix, h, w, world_size - 1, i - 1);
             }
 
-            represent_matrix(&matrix, h, w);
-            std::cout << "\n";
+            if (i % config_data["delta_iterations"].asInt() == 0){
+                visualise_matrix(&matrix, h, w, i / config_data["delta_iterations"].asInt() );
+            }
         }
 
         continue_signal = false;
@@ -95,6 +92,8 @@ int main(int argc, char *argv[])
             MPI_Send(&upper_neighbour[0], w, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
             MPI_Send(&lower_neighbour[0], w, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
         }
+
+        create_gif( config_data["needed_iterations"].asInt() / config_data["delta_iterations"].asInt() );
 
     } else {
         int partial_matrix_width;
@@ -132,6 +131,7 @@ int main(int argc, char *argv[])
             }
         }
     }
-
     MPI_Finalize();
 }
+
+
