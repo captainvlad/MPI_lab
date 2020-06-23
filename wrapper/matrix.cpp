@@ -9,7 +9,7 @@ std::vector<double>* initialize_matrix(int height, int width){
     return new std::vector<double>(height * width, 0);
 }
 
-double get_item(std::vector<double>* matrix, int row, int column, int height, int width){
+double get_item(std::vector<double>* matrix, int row, int column, int height , int width){
     return (*matrix)[row * width + column];
 }
 

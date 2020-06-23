@@ -11,6 +11,8 @@ include_directories("${JSONCPP_INCLUDE_DIRS}")
 
 find_package(MPI REQUIRED)
 
-add_executable(MPI main.cpp headers/config_processing.h headers/matrix_manipulations.h headers/matrix.h)
+add_executable(MPI main.cpp headers/config_processing.h headers/matrix_manipulations.h
+        headers/matrix.h headers/heat_calculation.h)
+
 target_link_libraries(MPI MPI::MPI_CXX)
 target_link_libraries(MPI ${JSONCPP_LIBRARIES})
