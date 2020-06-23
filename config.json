@@ -1,11 +1,14 @@
 {
   "height": 100,
   "width": 100,
-  "delta_x": 1,
-  "delta_y": 1,
-  "delta_t": 10,
+  "delta_x": 10,
+  "delta_y": 10,
+  "delta_t": 0.01,
   "temperatures": {
     "0": "0,0,100.25",
     "1": "1,1,200"
-  }
+  },
+  "conduction": 79.5,
+  "capacity": 0.444,
+  "density": 7.874
 }

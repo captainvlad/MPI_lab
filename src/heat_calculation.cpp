@@ -33,6 +33,7 @@ void calculate_heat( std::vector<double>* matrix, std::vector<double>* upper_nei
     double i_1_j_1_plus, i_1_j_1, i_1_minus_j_1, i_1_plus_j_1, i_1_j_1_minus, current_temp, current_row;
 
     if ( (*upper_neighbour)[0] != INT_MIN ){
+
         for (int i = 1; i < width - 1; i++){
 
             i_1_j_1_plus = get_item(matrix, 0, i+1, height, width);
@@ -54,6 +55,7 @@ void calculate_heat( std::vector<double>* matrix, std::vector<double>* upper_nei
 
 
     if ( (*lower_neighbour)[0] != INT_MIN ){
+
         current_row = height - 1;
 
         for (int i = 1; i < width - 1; i++){
