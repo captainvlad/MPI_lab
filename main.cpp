@@ -61,21 +61,21 @@ int main(int argc, char *argv[])
 
             continue_signal = true;
 
-            for (int i = 1; i < world_size; i++) {
-                MPI_Send(&continue_signal, 1, MPI_C_BOOL, i, 0, MPI_COMM_WORLD);
-                auto upper_neighbour = *get_upper_neighbour(&matrix, w, world_size - 1, i - 1);
-                auto lower_neighbour = *get_lower_neighbour(&matrix, w, world_size - 1, i - 1);
+            for (int j = 1; j < world_size; j++) {
+                MPI_Send(&continue_signal, 1, MPI_C_BOOL, j, 0, MPI_COMM_WORLD);
+                auto upper_neighbour = *get_upper_neighbour(&matrix, w, world_size - 1, j - 1);
+                auto lower_neighbour = *get_lower_neighbour(&matrix, w, world_size - 1, j - 1);
 
-                MPI_Send(&upper_neighbour[0], w, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
-                MPI_Send(&lower_neighbour[0], w, MPI_DOUBLE, i, 0, MPI_COMM_WORLD);
+                MPI_Send(&upper_neighbour[0], w, MPI_DOUBLE, j, 0, MPI_COMM_WORLD);
+                MPI_Send(&lower_neighbour[0], w, MPI_DOUBLE, j, 0, MPI_COMM_WORLD);
             }
 
-            for (int i = 1; i < world_size; i++) {
-                MPI_Recv(&partial_matrix_size, 1, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            for (int k = 1; k < world_size; k++) {
+                MPI_Recv(&partial_matrix_size, 1, MPI_INT, k, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
                 partial_matrix.resize(partial_matrix_size);
 
-                MPI_Recv(&partial_matrix[0], partial_matrix_size, MPI_DOUBLE, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                put_into(&matrix, &partial_matrix, h, w, world_size - 1, i - 1);
+                MPI_Recv(&partial_matrix[0], partial_matrix_size, MPI_DOUBLE, k, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                put_into(&matrix, &partial_matrix, h, w, world_size - 1, k - 1);
             }
 
             if (i % config_data["delta_iterations"].asInt() == 0){
